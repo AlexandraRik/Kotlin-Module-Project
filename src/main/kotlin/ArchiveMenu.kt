@@ -14,7 +14,7 @@ class ArchiveMenu(list: MutableList<Archive>): MenuInterface<Archive>(list){
     override fun addTo(list: MutableList<Archive>) {
         println("Дайте название архиву")
         val name = sc.nextLine()
-        if(name.isNotEmpty()){
+        if(name.isNotBlank()){
             val archive = Archive(name)
             list.add(archive)
             println("Архив $name успешно создан")
@@ -28,21 +28,31 @@ class ArchiveMenu(list: MutableList<Archive>): MenuInterface<Archive>(list){
 
     //метод, который позволяет выбрать архив в который переместиться
     override fun show(list: MutableList<Archive>) {
-        println("Выберите архив")
-        for (i in list) {
-            println("${list.indexOf(i) + 1}. ${i.name}")
-        }
-        val answer = sc.nextLine()
-        if (answer.isNotEmpty() && answer.toIntOrNull() != null) {
-            val selectedArchive = list[answer.toInt() - 1]
-            val noteMenu = NoteMenu(selectedArchive.notes)
-            noteMenu.menu(selectedArchive.notes)
-
+        if (list.isEmpty()) {
+            println("Архивов пока нет")
         } else {
-            println("Неправильный формат")
+            println("Выберите архив")
+            for (i in list) {
+                println("${list.indexOf(i) + 1}. ${i.name}")
+            }
+            println("${list.size + 1}. Создать архив")
+            println("${list.size + 2}. Назад")
+            val answer = sc.nextLine()
+            if (answer.isNotEmpty() && answer.toIntOrNull() != null) {
+                if(answer.toInt()-1 == list.size){
+                    addTo(list)
+                } else if(answer.toInt()-1 == list.size+1){
+                    return
+                } else {
+                    val selectedArchive = list[answer.toInt() - 1]
+                    val noteMenu = NoteMenu(selectedArchive.notes)
+                    noteMenu.menu(selectedArchive.notes)
+                }
+            } else {
+                println("Неправильный формат")
+            }
         }
     }
-
 
 }
 

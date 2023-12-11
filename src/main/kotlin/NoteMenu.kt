@@ -14,7 +14,7 @@ class NoteMenu(list: MutableList <Note>) : MenuInterface<Note>(list) {
         val name = sc.nextLine()
         println("Напишите заметку")
         val note = sc.nextLine()
-        if (name.isNotEmpty() && note.isNotEmpty()) {
+        if (name.isNotBlank() && note.isNotBlank()) {
             val newNote = Note(name, note)
             list.add(newNote)
             println("Заметка $name успешно добавлена")
